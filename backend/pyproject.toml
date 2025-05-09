@@ -6,10 +6,16 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "black>=25.1.0",
+    "chroma-haystack>=3.1.0",
+    "chromadb>=1.0.8",
     "docling>=2.31.0",
+    "haystack-ai>=2.13.1",
     "isort>=6.0.1",
     "mypy>=1.15.0",
+    "openai>=1.78.0",
+    "python-dotenv>=1.1.0",
     "ruff>=0.11.8",
+    "sentence-transformers>=4.1.0",
     "uvicorn>=0.34.2",
 ]
 
