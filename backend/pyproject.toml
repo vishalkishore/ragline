@@ -6,26 +6,35 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "black>=25.1.0",
+    "docling>=2.31.0",
     "isort>=6.0.1",
     "mypy>=1.15.0",
     "ruff>=0.11.8",
+    "uvicorn>=0.34.2",
 ]
 
 # Ruff Linter & Formatter Configuration
 [tool.ruff]
 line-length = 88 
 target-version = "py310"  
-select = ["E", "F", "I", "UP", "B"]  
-ignore = ["E501"]  
+lint.select = ["E", "F", "I", "UP", "B"]  
+lint.ignore = ["E501"]  
 
 # Black Formatting Configuration
 [tool.black]
 line-length = 88
+preview = true
+
+
 
 # isort Configuration
 [tool.isort]
 profile = "black"
 line_length = 88 
+combine_as_imports = true
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
 
 
 [tool.mypy]
