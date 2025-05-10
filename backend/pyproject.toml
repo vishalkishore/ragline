@@ -14,7 +14,6 @@ dependencies = [
     "mypy>=1.15.0",
     "openai>=1.78.0",
     "python-dotenv>=1.1.0",
-    "python-multipart>=0.0.20",
     "ruff>=0.11.8",
     "sentence-transformers>=4.1.0",
     "uvicorn>=0.34.2",
