@@ -2,7 +2,10 @@ import openai
 from haystack import Document, Pipeline, component
 from haystack.components.embedders import SentenceTransformersTextEmbedder
 from haystack_integrations.components.retrievers.chroma import ChromaEmbeddingRetriever
+from haystack.components.retrievers.in_memory import InMemoryBM25Retriever
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
+from haystack.components.joiners.document_joiner import DocumentJoiner
+from haystack.components.rankers import TransformersSimilarityRanker
 
 from core.config import settings
 from core.logger import get_agent_logger, log_execution
@@ -66,7 +69,19 @@ class QueryProcessor:
             "embedder", SentenceTransformersTextEmbedder(model=settings.embedding_model)
         )
         pipeline.add_component(
+            instance=InMemoryBM25Retriever(document_store=doc_store),
+            name="bm25_retriever"
+        )
+        pipeline.add_component(
             "retriever", ChromaEmbeddingRetriever(document_store=doc_store)
+        )
+        pipeline.add_component(
+            instance=DocumentJoiner(join_mode="concatenate"),
+            name="joiner"
+        )
+        pipeline.add_component(
+            "ranker",
+            TransformersSimilarityRanker(model="BAAI/bge-reranker-base")
         )
         pipeline.add_component("prompt", PromptBuilder())
         pipeline.add_component(
@@ -77,9 +92,12 @@ class QueryProcessor:
         )
 
         pipeline.connect("embedder.embedding", "retriever.query_embedding")
-        pipeline.connect("retriever.documents", "prompt.documents")
+        pipeline.connect("retriever.documents", "joiner")
+        pipeline.connect("bm25_retriever.documents", "joiner")
+        pipeline.connect("joiner", "ranker")
+        pipeline.connect("ranker.documents","prompt.documents")
         pipeline.connect("prompt.prompt", "llm.prompt")
-        pipeline.connect("retriever.documents", "llm.documents")
+        pipeline.connect("ranker.documents", "llm.documents")
 
         return pipeline
 
