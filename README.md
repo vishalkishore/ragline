@@ -20,7 +20,6 @@ This project consists of two main components:
 - Select multiple documents to query simultaneously
 - Ask natural language questions about documents
 - View references used to generate each answer
-- Dark and light mode UI support
 
 ---
 
@@ -66,4 +65,13 @@ While this project was originally designed for **hybrid retrieval** (BM25 + dens
 cd backend
 uv sync
 uv run uvicorn main:app --reload
+```
+
+
+### 🔧 Frontend Setup
+
+```bash
+cd frontend
+npm i
+npm run dev
 ```
