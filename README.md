@@ -6,6 +6,9 @@ A **Retrieval-Augmented Generation (RAG)** system that enables users to upload P
 
 ---
 
+https://github.com/user-attachments/assets/66559d03-fff5-44ff-a57a-582cdbaed988
+
+
 ## 🏗 Architecture
 
 This project consists of two main components:
