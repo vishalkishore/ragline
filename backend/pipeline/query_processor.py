@@ -58,7 +58,6 @@ class PromptBuilder:
             f"{query}\n\n"
             f"Answer:"
         )
-        self.logger.info(f"Prompt: {prompt}")
 
         return {"prompt": prompt}
 
