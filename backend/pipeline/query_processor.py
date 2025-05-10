@@ -22,7 +22,7 @@ class OpenAIGenerator:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "Answer based on context."},
+                    {"role": "system", "content": "You are a helpful assistant that answers questions based on the provided context. if inefficient or irrelevant use your own knowledge. but if you don't know the answer, say 'I don't know based on the provided information.'"},
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0.7,
@@ -39,16 +39,29 @@ class OpenAIGenerator:
 
 @component
 class PromptBuilder:
+    def __init__(self):
+        self.logger = get_agent_logger("PromptBuilder")
     @component.output_types(prompt=str)
     @log_execution
     def run(self, documents: list[Document], query: str):
-        context = (
-            "\n\n".join(
-                [f"Doc {i+1}:\n{doc.content}" for i, doc in enumerate(documents)]
-            )
-            or "No context."
+        context_blocks = [
+            f"[{i + 1}] {doc.content.strip()}"
+            for i, doc in enumerate(documents)
+            if doc.content.strip()
+        ]
+        context = "\n\n".join(context_blocks) if context_blocks else "No relevant context available."
+
+        prompt = (
+            f"The following are excerpts from documents:\n\n"
+            f"{context}\n\n"
+            f"Based on the above, answer the following question:\n\n"
+            f"{query}\n\n"
+            f"Answer:"
         )
-        return {"prompt": f"Context:\n{context}\n\nQuestion: {query}\n\nAnswer:"}
+        self.logger.info(f"Prompt: {prompt}")
+
+        return {"prompt": prompt}
+
 
 
 class QueryProcessor:

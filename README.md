@@ -2,6 +2,8 @@
 
 A **Retrieval-Augmented Generation (RAG)** system that enables users to upload PDF documents and ask questions about their content. The system processes PDFs, extracts relevant data, and leverages OpenAI models to provide accurate, reference-backed answers.
 
+![Website](./assets/page.jpeg)
+
 ---
 
 ## 🏗 Architecture
